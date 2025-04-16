@@ -28,7 +28,7 @@ class DespesaController extends Controller
             $query->whereDate('data', '<=', $request->ate);
         }
 
-        return DespesaResource::collection($query->latest()->paginate(10));
+        return DespesaResource::collection($query->latest()->get());
     }
 
     public function store(DespesaRequest $request)
