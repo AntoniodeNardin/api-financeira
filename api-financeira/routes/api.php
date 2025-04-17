@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\DespesaController;
 use App\Http\Controllers\API\CategoriaController;
+use App\Http\Controllers\API\MetaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::apiResource('categorias', CategoriaController::class);
         Route::apiResource('despesas', DespesaController::class);
+        Route::apiResource('metas', MetaController::class);
     });
 });
 

@@ -3,79 +3,41 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoriaStoreRequest;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
+use App\Http\Resources\CategoriaResource;
 
 class CategoriaController extends Controller
+
 {
-    // Listar categorias
     public function index(Request $request)
     {
-        // Exibir categorias associadas ao usuário autenticado
-        $categorias = Categoria::where('user_id', $request->user()->id)->get();
-        return response()->json($categorias);
+        return CategoriaResource::collection(Categoria::where('user_id', $request->user()->id)->get());
     }
 
-    // Criar nova categoria
-    public function store(Request $request)
+    public function store(CategoriaStoreRequest $request)
     {
-        // Validar dados
-        $data = $request->validate([
-            'nome' => 'required|string|max:100',
-        ]);
-
-        // Criar categoria
         $categoria = Categoria::create([
             'user_id' => $request->user()->id,
-            'nome' => $data['nome'],
+            'nome' => $request->validated()['nome'],
         ]);
 
-        return response()->json($categoria, 201);
+        return new CategoriaResource($categoria);
     }
 
-    // Exibir categoria específica
-
-    public function show(Request $request, Categoria $categoria)
+    public function show(Categoria $categoria)
     {
-        // Verificar se a categoria pertence ao usuário
-        if ($categoria->user_id !== $request->user()->id) {
-            return response()->json(['message' => 'Acesso não autorizado'], 403);
-        }
-
-        return response()->json($categoria);
+        $this->authorize('view', $categoria);
+        return new CategoriaResource($categoria);
     }
 
-    // Atualizar categoria
-    public function update(Request $request, Categoria $categoria)
+    public function update(CategoriaStoreRequest $request, Categoria $categoria)
     {
-        // Verificar se a categoria pertence ao usuário
-        if ($categoria->user_id !== $request->user()->id) {
-            return response()->json(['message' => 'Acesso não autorizado'], 403);
-        }
+        $this->authorize('update', $categoria);
 
-        // Validar dados
-        $data = $request->validate([
-            'nome' => 'required|string|max:100',
-        ]);
+        $categoria->update($request->all());
 
-        // Atualizar categoria
-        $categoria->update([
-            'nome' => $data['nome'],
-        ]);
-
-        return response()->json($categoria);
-    }
-
-    // Excluir categoria
-    public function destroy(Categoria $categoria, Request $request)
-    {
-        // Verificar se a categoria pertence ao usuário
-        if ($categoria->user_id !== $request->user()->id) {
-            return response()->json(['message' => 'Acesso não autorizado'], 403);
-        }
-
-        // Deletar categoria
-        $categoria->delete();
-        return response()->json(['message' => 'Categoria excluída com sucesso']);
+        return new CategoriaResource($categoria);
     }
 }

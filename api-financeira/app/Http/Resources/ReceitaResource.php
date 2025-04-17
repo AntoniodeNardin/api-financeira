@@ -4,17 +4,18 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DespesaResource extends JsonResource
+class ReceitaResource extends JsonResource
 {
-    public function toArray($request): array
+    public function toArray($request)
     {
         return [
             'id' => $this->id,
-            'descricao' => $this->descricao,
             'valor' => $this->valor,
             'data' => $this->data,
-            'categoria' => $this->categoria->nome,
+            'descricao' => $this->descricao,
+            'categoria' => $this->categoria?->nome,
             'criado_em' => $this->created_at->format('d/m/Y H:i'),
         ];
     }
 }
+

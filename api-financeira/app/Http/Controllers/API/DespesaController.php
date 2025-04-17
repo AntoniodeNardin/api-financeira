@@ -14,19 +14,7 @@ class DespesaController extends Controller
     {
         $user = $request->user();
 
-        $query = Despesa::where('user_id', $user->id);
-
-        if ($request->filled('categoria')) {
-            $query->where('categoria', $request->categoria);
-        }
-
-        if ($request->filled('de')) {
-            $query->whereDate('data', '>=', $request->de);
-        }
-
-        if ($request->filled('ate')) {
-            $query->whereDate('data', '<=', $request->ate);
-        }
+        $query = Despesa::with('categoria')->where('user_id', $user->id);
 
         return DespesaResource::collection($query->latest()->get());
     }
@@ -43,28 +31,24 @@ class DespesaController extends Controller
 
     public function show(Despesa $despesa)
     {
-        $this->authorizeUser($despesa);
+        $this->authorize('view', $despesa);
+        $despesa->load('categoria');
         return new DespesaResource($despesa);
     }
 
-    public function update(DespesaRequest $request, Despesa $despesa)
+    public function update(Request $request, Despesa $despesa)
     {
-        $this->authorizeUser($despesa);
-        $despesa->update($request->validated());
+        $this->authorize('update', $despesa);
+        $despesa->update($request->all());
+
         return new DespesaResource($despesa);
     }
 
     public function destroy(Despesa $despesa)
     {
-        $this->authorizeUser($despesa);
+        $this->authorize('delete', $despesa);
         $despesa->delete();
-        return response()->json(['message' => 'Despesa excluída com sucesso']);
-    }
 
-    private function authorizeUser(Despesa $despesa)
-    {
-        if (auth()->id() !== $despesa->user_id) {
-            abort(403, 'Acesso não autorizado');
-        }
+        return response()->json(['message' => 'Despesa excluída com sucesso']);
     }
 }

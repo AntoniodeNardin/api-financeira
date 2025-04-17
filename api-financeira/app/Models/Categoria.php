@@ -9,6 +9,5 @@ class Categoria extends Model
 {
     use HasFactory;
 
-    // Defina os campos que podem ser preenchidos em massa
     protected $fillable = ['nome', 'user_id'];
 }
