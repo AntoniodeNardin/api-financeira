@@ -1,0 +1,59 @@
+# Diretórios do sistema e IDEs
+/.idea
+/.vscode
+/.phpunit.result.cache
+
+# Diretórios de cache e build
+/node_modules
+/public/storage
+/storage/*.key
+/storage/app/public
+/storage/framework/cache/data
+/storage/framework/sessions
+/storage/framework/views
+/storage/logs
+
+# Diretório de dependências PHP
+/vendor
+
+# Arquivos de ambiente e segurança
+.env
+.env.*.backup
+.phpunit.result.cache
+
+# Arquivos de deploy AWS, Forge, Envoyer, etc
+.env.backup
+.deploy.php
+
+# Banco SQLite local (se usado)
+database/*.sqlite
+
+# Cache de Composer
+composer.lock
+composer.phar
+
+# Cache de npm/yarn/pnpm
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Arquivos de log
+*.log
+
+# Armazenamento de debug
+Homestead.yaml
+Homestead.json
+
+# Docker
+docker-compose.override.yml
+
+# Ignorar arquivos de coverage de testes
+coverage/
+
+# Arquivos específicos de IDEs
+*.sublime-workspace
+*.sublime-project
+.idea/
+
+# Laravel Horizon config cache (se usar)
+horizon.json
